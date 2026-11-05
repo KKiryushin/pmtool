@@ -1,0 +1,416 @@
+{
+  "framework": {
+    "name": "Product Manager",
+    "description": "Competency framework for Product Managers across Junior, Middle, and Senior levels, covering research, lifecycle/economics, delivery, marketing, leadership, people management, and influence."
+  },
+  "scale": {
+    "name": "Proficiency 0-10",
+    "description": "Each subsequent proficiency level builds upon the previous one.",
+    "points": [
+      { "score": 0, "label": "No knowledge / Completely unfamiliar.", "percent": 0 },
+      { "score": 0.5, "label": "Surface-level exposure (I have heard/read/studied it briefly).", "percent": 25 },
+      { "score": 1, "label": "Basic application (I'm familiar with theory and have brief practical exposure; <1 year experience).", "percent": 50 },
+      { "score": 3, "label": "Core competence (I'm fluent in foundational theory, experienced in specific methodology; ≥1.5 year experience).", "percent": 74 },
+      { "score": 4, "label": "Advanced mastery (I have deep structural knowledge of theory and nuances, proven track record; ≥2 years experience).", "percent": 79 },
+      { "score": 7, "label": "Strategic capability & Guidance (I have strategic application, contextual judgment, and ability to guide others; ≥3 years experience).", "percent": 91 },
+      { "score": 10, "label": "Subject Matter Expert & Mentor (I have in-depth mentoring, training, and systemic education of others; ≥5 years experience).", "percent": 100 }
+    ]
+  },
+  "levels": [
+    {
+      "name": "Junior",
+      "shortName": "Jr",
+      "description": "Level 3 Product Manager: Core Product Support & Optimization. Continues to master the profession. Handles standard scenarios independently, but seeks guidance in complex situations. Deliverables may require peer review."
+    },
+    {
+      "name": "Middle",
+      "shortName": "Mid",
+      "description": "Level 2 Product Manager: End-to-End Product Management & P&L. Fully autonomous; independently navigates any situation."
+    },
+    {
+      "name": "Senior",
+      "shortName": "Sr",
+      "description": "Level 1 Product Manager: Multi-Product Portfolio Management & Cross-Product P&L. Possesses deep domain expertise, enabling custom solutions and performance that exceeds standards. Proposes and implements changes that drive impact in their scope. Preserves and scales knowledge within the company, mentoring others and elevating team capabilities."
+    }
+  ],
+  "categories": [
+    {
+      "name": "Product Research",
+      "targetsByLevel": { "Junior": 91, "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Junior": [
+          {
+            "name": "Product Research Support",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I create user personas.", "weight": 1 },
+              { "statement": "I design questionnaires, conduct user interviews, and process survey results.", "weight": 1 },
+              { "statement": "I maintain hypothesis backlogs for user problems and solutions.", "weight": 1 },
+              { "statement": "I design experiment methodologies to validate hypotheses.", "weight": 1 },
+              { "statement": "I run experiments to validate hypotheses.", "weight": 1 },
+              { "statement": "I maintain registries of competing products and their key features.", "weight": 1 },
+              { "statement": "I collect and analyze user feedback on our product and its competitors.", "weight": 1 }
+            ]
+          }
+        ],
+        "Middle": [
+          {
+            "name": "Product Research Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I select the appropriate research methodologies.", "weight": 1 },
+              { "statement": "I select and manage external research vendors.", "weight": 1 },
+              { "statement": "I own the end-to-end research process, from planning to execution control.", "weight": 1 },
+              { "statement": "I analyze research results to drive product insights.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Cross-Product Research Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I own, plan, and oversee the research process across my own and adjacent products.", "weight": 1 },
+              { "statement": "I analyze research results synthetically across my own and adjacent products.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Product Lifecycle Management & Economics",
+      "targetsByLevel": { "Junior": 91, "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Junior": [
+          {
+            "name": "Product Metrics & Development Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I track and monitor key product metrics.", "weight": 1 },
+              { "statement": "I define key product milestones, checkpoints, and target metric values for each phase.", "weight": 1 }
+            ]
+          }
+        ],
+        "Middle": [
+          {
+            "name": "Roadmap Planning & Scope Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I define the planning horizon for product development.", "weight": 1 },
+              { "statement": "I map and distribute key product features across development phases.", "weight": 1 },
+              { "statement": "I pitch and defend the product roadmap to investors and stakeholders.", "weight": 1 },
+              { "statement": "I manage changes and adjustments to the product roadmap.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Product Performance & Strategy",
+            "isConditional": true,
+            "conditionalQuestionText": "Is the product being sold?",
+            "actions": [
+              { "statement": "I make strategic decisions regarding product development.", "weight": 1 },
+              { "statement": "I define and formalize product requirements.", "weight": 1 },
+              { "statement": "I manage the end-to-end work program for product development.", "weight": 1 },
+              { "statement": "I monitor and analyze product revenues and expenses (P&L Management).", "weight": 1 },
+              { "statement": "I develop and model product unit economics.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Business Modeling, Pricing & Strategy",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I build financial models, P&L statements, revenue projections, and expense forecasts.", "weight": 1 },
+              { "statement": "I develop pricing strategies.", "weight": 1 },
+              { "statement": "I formulate the overarching product growth strategy.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Product Budget Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I identify budget line items for product revenues and expenses.", "weight": 1 },
+              { "statement": "I set financial thresholds and control product revenues and expenditures.", "weight": 1 },
+              { "statement": "I prepare and align funding proposals with investors and stakeholders.", "weight": 1 },
+              { "statement": "I reallocate product revenues across different expense lines.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Manage Projects & Delivery",
+      "targetsByLevel": { "Junior": 91, "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Junior": [
+          {
+            "name": "Product Requirements Definition",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I study the product concept and business plan.", "weight": 1 },
+              { "statement": "I build a registry of key product features.", "weight": 1 },
+              { "statement": "I write user stories and product usage scenarios.", "weight": 1 },
+              { "statement": "I facilitate workshops and team syncs to discuss product requirements.", "weight": 1 },
+              { "statement": "I organize and prioritize product requirements.", "weight": 1 },
+              { "statement": "I QA the final implementation against initial requirements.", "weight": 1 },
+              { "statement": "I draft release notes and changelogs for users.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Design, Development & Release Support",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I consult the engineering team on product requirements.", "weight": 1 },
+              { "statement": "I brief designers and review design solutions for compliance with requirements.", "weight": 1 },
+              { "statement": "I QA the implementation quality of requirements.", "weight": 1 }
+            ]
+          }
+        ],
+        "Middle": [
+          {
+            "name": "Product Definition, Design & Requirements",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I gather hypotheses regarding stakeholder problems and IT-enabled solutions.", "weight": 1 },
+              { "statement": "I create, review, refine, and iterate on product concepts, business models, and business plans.", "weight": 1 },
+              { "statement": "I justify and defend business models, concepts, and business plans to investors.", "weight": 1 },
+              { "statement": "I secure funding for proof-of-concept (PoC) validation.", "weight": 1 },
+              { "statement": "I validate product concepts via prototyping and analyze the outcomes.", "weight": 1 },
+              { "statement": "I secure budget allocation for core product development.", "weight": 1 },
+              { "statement": "I assign and accept product design deliverables.", "weight": 1 },
+              { "statement": "I delegate and sign off on product requirements definition tasks.", "weight": 1 },
+              { "statement": "I manage the product backlog and establish prioritization principles.", "weight": 1 },
+              { "statement": "I manage scope changes for product requirements.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Product Execution & Delivery",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I create technical specifications and tasks for product development.", "weight": 1 },
+              { "statement": "I co-plan product development with the engineering lead.", "weight": 1 },
+              { "statement": "I monitor development progress and run acceptance testing (UAT) on deliverables.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Portfolio Program Management & Rollout",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I commission project programs for product creation, development, go-to-market, and/or internal rollouts.", "weight": 1 },
+              { "statement": "I route project orders to the responsible departments and business units.", "weight": 1 },
+              { "statement": "I coordinate the execution of the cross-functional program plan.", "weight": 1 },
+              { "statement": "I sign off on individual milestones and stages of the program.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Strategic Partnerships & Alliances",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I identify potential strategic partners.", "weight": 1 },
+              { "statement": "I lead negotiations with potential partners.", "weight": 1 },
+              { "statement": "I execute partnership agreements.", "weight": 1 },
+              { "statement": "I organize and run joint partner campaigns and initiatives.", "weight": 1 },
+              { "statement": "I renegotiate terms and conditions of existing partnership agreements.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Product marketing & Promotion",
+      "targetsByLevel": { "Junior": 91, "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Junior": [
+          {
+            "name": "Marketing & Roadmap Alignment Support",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I prepare data briefs on competitors, user feedback, results, and product specs.", "weight": 1 },
+              { "statement": "I iterate on the product roadmap based on alignment discussions.", "weight": 1 },
+              { "statement": "I suggest marketing channels and promotional tactics.", "weight": 1 },
+              { "statement": "I draft press releases and news announcements.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Product Adoption Support",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I draft product descriptions for clients and end-users.", "weight": 1 },
+              { "statement": "I conduct product demonstrations and feature walkthroughs.", "weight": 1 },
+              { "statement": "I consult prospective clients on product capabilities.", "weight": 1 },
+              { "statement": "I maintain a registry of prospective client queries.", "weight": 1 },
+              { "statement": "I analyze feedback from prospective clients.", "weight": 1 }
+            ]
+          }
+        ],
+        "Middle": [
+          {
+            "name": "Cross-Functional Go-To-Market Coordination",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I run alignment syncs and build joint roadmaps with development and marketing teams.", "weight": 1 },
+              { "statement": "I identify and resolve bottlenecks in workflows and team interactions across dev and marketing.", "weight": 1 },
+              { "statement": "I maintain a registry of relevant industry events.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "GTM Strategy & Launch Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I design the marketing and promotional event plan.", "weight": 1 },
+              { "statement": "I coordinate and execute product promotion initiatives.", "weight": 1 }
+            ]
+          },
+          {
+            "name": "Sales Enablement & Analytics",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I provide expert sales support for complex deals.", "weight": 1 },
+              { "statement": "I consult the sales team on complex, technical, or nuanced product questions.", "weight": 1 },
+              { "statement": "I analyze product sales performance and trends.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Product PR & Public Relations",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I draft and place product publications and announcements in media and public sources.", "weight": 1 },
+              { "statement": "I host public awareness events and keynotes (e.g., corporate/ecosystem events or media briefings).", "weight": 1 },
+              { "statement": "I broadcast product updates across available internal and external communication channels.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Team Leadership & Organization",
+      "targetsByLevel": { "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Middle": [
+          {
+            "name": "Team Capability, Goals & Culture Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I interview and evaluate candidates for my product team.", "weight": 1 },
+              { "statement": "I map current and future team competencies, taking them into account when assigning tasks.", "weight": 1 },
+              { "statement": "I collaborate with the team to set collective department goals.", "weight": 1 },
+              { "statement": "I foster a culture where every member feels included and aligned with a shared mission.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Team Capability, Goals & Culture Management",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I act as a mentor for new hires, leading onboarding conversations and guiding them through their integration period.", "weight": 1 },
+              { "statement": "I objectively evaluate each team member's contributions to department results and provide actionable, growth-oriented feedback.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "People Management & Development",
+      "targetsByLevel": { "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Middle": [
+          {
+            "name": "Driving Growth and Alignment through Feedback and Purpose",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I provide timely and constructive feedback.", "weight": 1 },
+              { "statement": "I ensure team members understand the purpose of their tasks, the expected outcomes, and how their work impacts the team's overall goals.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Building Personal Connections and Psychological Safety",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I genuinely care about each team member, taking an active interest in both their professional progress and personal well-being, and", "weight": 1 },
+              { "statement": "I am always ready to listen and support them through personal challenges.", "weight": 1 },
+              { "statement": "I foster an environment where it is safe to make mistakes, and ensure every team member knows they have the room to fail and learn.", "weight": 1 },
+              { "statement": "I maintain transparency by providing equal access to information for all team members including company goals, upcoming changes, and active projects.", "weight": 1 },
+              { "statement": "I hold regular touchpoints with every team member, including 1-on-1s, Individual Development Plan (IDP) reviews, and project syncs.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Influence & Interaction",
+      "targetsByLevel": { "Junior": 91, "Middle": 91, "Senior": 91 },
+      "competenciesByLevel": {
+        "Junior": [
+          {
+            "name": "Communication, Active Listening & Feedback",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I maintain a welcoming attitude and am always approachable.", "weight": 1 },
+              { "statement": "I practice active listening to genuinely understand my counterpart.", "weight": 1 },
+              { "statement": "I proactively give and request feedback regarding team interaction and workflows.", "weight": 1 }
+            ]
+          }
+        ],
+        "Middle": [
+          {
+            "name": "Leadership, Vision & Collaborative Communication",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I convey information clearly, concisely, and structurally (verbally, in writing, and visually).", "weight": 1 },
+              { "statement": "I communicate and defend the product vision using concrete, data-driven arguments.", "weight": 1 },
+              { "statement": "I collaborate effectively with adjacent departments, sharing and adopting best practices.", "weight": 1 },
+              { "statement": "I inspire and mobilize people around me to collaborate toward shared goals.", "weight": 1 },
+              { "statement": "I build long-term professional relationships with colleagues and partners.", "weight": 1 }
+            ]
+          }
+        ],
+        "Senior": [
+          {
+            "name": "Accountability, Adaptability & Facilitation",
+            "isConditional": false,
+            "conditionalQuestionText": null,
+            "actions": [
+              { "statement": "I take extreme ownership of decisions and assume responsibility for team outcomes, even in failure.", "weight": 1 },
+              { "statement": "I vocalize and defend my viewpoint with strong rationale, even when it challenges the majority.", "weight": 1 },
+              { "statement": "I maintain a collaborative, solution-oriented mindset in any situation.", "weight": 1 },
+              { "statement": "I dynamically adapt my communication style depending on the stakeholder/interlocutor.", "weight": 1 },
+              { "statement": "I drive effective, frictionless collaboration within my department and across business units.", "weight": 1 }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

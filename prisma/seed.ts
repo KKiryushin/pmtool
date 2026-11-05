@@ -1,10 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { seedFramework } from "./seedFramework";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await seedAdmin();
+  await seedFramework(prisma);
+}
+
+async function seedAdmin() {
   const email = process.env.SEED_ADMIN_EMAIL || "admin@example.com";
   const name = process.env.SEED_ADMIN_NAME || "Admin";
   let password = process.env.SEED_ADMIN_PASSWORD;

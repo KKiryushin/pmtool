@@ -12,10 +12,10 @@ Tailscale at `http://<tailscale-ip-or-name>:4317`.
 - [x] Session persists across a server restart (JWT cookie, not in-memory).
 
 ## Phase 1 — Admin CRUD + Seed Import
-- [ ] Admin screens list/create/edit/delete Framework, Scale/ScalePoint, Level, Category, CategoryLevelTarget, Competency (incl. conditional flag/question), Action (incl. weight), Users.
-- [ ] Seeded real PM framework content (from the Google Sheet) renders correctly end-to-end.
-- [ ] Creating a brand-new throwaway Level/Category/Action via the UI works (proves generic CRUD, not just seeded data).
-- [ ] Non-admin users get 403/redirect on `/admin` and `/api/admin/*`.
+- [x] Admin screens list/create/edit/delete Framework, Scale/ScalePoint, Level, Category, CategoryLevelTarget, Competency (incl. conditional flag/question), Action (incl. weight), Users.
+- [x] Seeded real PM framework content (from the Google Sheet) renders correctly end-to-end: 3 levels, 7 categories, 27 competencies (incl. the one conditional competency with its question text), 109 actions, 19 category/level targets.
+- [x] Creating/editing/deleting a throwaway Scale + ScalePoint via the UI and API works (generic CRUD, not just seeded data).
+- [x] Non-admin (SELF_ASSESSOR) user gets redirected away from `/admin` and gets 403 from `/api/admin/*`.
 
 ## Phase 2 — Assessment-Taking Workflow
 - [ ] Can create a new self-assessment (pick framework + level).

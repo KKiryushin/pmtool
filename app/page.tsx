@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
 
 export default async function Home() {
@@ -10,6 +11,12 @@ export default async function Home() {
         Signed in as {session?.user?.name} ({session?.user?.email}) — role:{" "}
         {session?.user?.role}
       </p>
+
+      {session?.user?.role === "ADMIN" && (
+        <Link href="/admin" className="text-sm underline">
+          Admin panel
+        </Link>
+      )}
 
       <form
         action={async () => {
