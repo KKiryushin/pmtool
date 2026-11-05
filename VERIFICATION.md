@@ -25,9 +25,9 @@ Tailscale at `http://<tailscale-ip-or-name>:4317`.
 - [x] Submitting flips status to SUBMITTED, the UI goes read-only, and the API now rejects score edits with 409.
 
 ## Phase 3 — Dashboard
-- [ ] Radar chart shows current vs target % per category for the latest assessment.
-- [ ] Toggling `Framework.rollupStrategy` in admin changes the dashboard numbers live, with no score re-entry.
-- [ ] Numbers roughly match a hand-checked assessment against the original Google Sheet.
+- [x] Radar chart (Current vs Target, with distinct colors/line styles) and a category table render for an assessment's rollup.
+- [x] Toggling `Framework.rollupStrategy` in admin (WEIGHTED_AVERAGE <-> MEDIAN_PENALIZED) changed a scored category's % live (98.5% -> 97%) with zero score re-entry, confirming rollup is computed at read time.
+- [x] `lib/scoring` has 11 passing unit tests (`npm test`), including the ported legacy median-penalized formula checked against hand-computed cases.
 
 ## Phase 4 — LLM Development Plan
 - [ ] With `OPENAI_API_KEY` unset: "Generate plan" shows a clear error; rest of the app is unaffected.

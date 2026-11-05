@@ -91,6 +91,10 @@ export default function AssessmentWorkspacePage({
         </span>
       </div>
 
+      <Link href={`/assessments/${id}/dashboard`} className="text-sm underline">
+        View dashboard →
+      </Link>
+
       <ul className="divide-y divide-black/10 dark:divide-white/10">
         {categories.map((c) => (
           <li key={c.id} className="py-3">
