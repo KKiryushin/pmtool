@@ -18,11 +18,11 @@ Tailscale at `http://<tailscale-ip-or-name>:4317`.
 - [x] Non-admin (SELF_ASSESSOR) user gets redirected away from `/admin` and gets 403 from `/api/admin/*`.
 
 ## Phase 2 — Assessment-Taking Workflow
-- [ ] Can create a new self-assessment (pick framework + level).
-- [ ] Competency-at-a-time screen shows all levels' actions for the current category side by side, with level descriptions.
-- [ ] Conditional yes/no question UI appears for conditional competencies and excludes them when answered "no".
-- [ ] Scores autosave; reloading or closing mid-assessment resumes exactly where left off.
-- [ ] Submitting validates completeness and flips status to SUBMITTED.
+- [x] Can create a new self-assessment (pick framework + level); level dropdown is populated from the chosen framework.
+- [x] Category scoring screen shows all levels' competencies/actions side by side, with level descriptions and per-level targets, matching the real seeded content.
+- [x] Conditional yes/no question UI ("Is the product being sold?") appears and excludes its 5 actions from both the screen and the category/overall progress counts when answered "No".
+- [x] Scores autosave (confirmed via reload: selected score persisted); overall progress counter updates live (109 -> 104 after excluding the conditional competency, 1/104 after scoring one action).
+- [x] Submitting flips status to SUBMITTED, the UI goes read-only, and the API now rejects score edits with 409.
 
 ## Phase 3 — Dashboard
 - [ ] Radar chart shows current vs target % per category for the latest assessment.

@@ -12,6 +12,10 @@ export default async function Home() {
         {session?.user?.role}
       </p>
 
+      <Link href="/assessments" className="text-sm underline">
+        Your assessments
+      </Link>
+
       {session?.user?.role === "ADMIN" && (
         <Link href="/admin" className="text-sm underline">
           Admin panel
