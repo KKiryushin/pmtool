@@ -46,6 +46,7 @@ export const competencySchema = z.object({
   name: z.string().min(1),
   isConditional: z.boolean().optional(),
   conditionalQuestionText: z.string().optional().nullable(),
+  weight: z.number().min(0).optional(),
   sortOrder: z.number().int().optional(),
 });
 

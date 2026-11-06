@@ -18,6 +18,7 @@ export interface ActionScoreInput {
 
 export interface CompetencyInput {
   id: string;
+  weight: number;
   actions: ActionScoreInput[];
 }
 
@@ -124,10 +125,21 @@ export function computeCompetencyPercent(
   return scoreToPercent(raw, scalePoints);
 }
 
-/** Category percent is the simple average of its competencies' percents. */
-export function computeCategoryPercent(competencyPercents: number[]): number | null {
-  if (competencyPercents.length === 0) return null;
-  return mean(competencyPercents);
+export interface CompetencyPercentInput {
+  percent: number;
+  weight: number;
+}
+
+/**
+ * Category percent is the weighted average of its competencies' percents,
+ * using each competency's own weight (defaults to 1.0, admin-editable) —
+ * mirrors how actions are weighted within a competency.
+ */
+export function computeCategoryPercent(competencies: CompetencyPercentInput[]): number | null {
+  if (competencies.length === 0) return null;
+  const totalWeight = competencies.reduce((sum, c) => sum + c.weight, 0);
+  if (totalWeight === 0) return null;
+  return competencies.reduce((sum, c) => sum + c.percent * c.weight, 0) / totalWeight;
 }
 
 export function computeAssessmentRollup(
@@ -138,7 +150,10 @@ export function computeAssessmentRollup(
   const results: CategoryResult[] = categories.map((cat) => {
     const competencyPercents = cat.competencies
       .filter((c) => c.actions.length > 0)
-      .map((c) => computeCompetencyPercent(c.actions, strategy, scalePoints));
+      .map((c) => ({
+        percent: computeCompetencyPercent(c.actions, strategy, scalePoints),
+        weight: c.weight,
+      }));
 
     return {
       id: cat.id,

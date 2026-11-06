@@ -7,7 +7,7 @@ export default function CompetenciesAdminPage() {
     <ResourceTable
       title="Competencies"
       resourcePath="/api/admin/competencies"
-      description="A competency is a (Category, Level) pair's specific content — e.g. 'Product Research Support' at Junior vs 'Product Research Management' at Middle, for the same category."
+      description="A competency is a (Category, Level) pair's specific content — e.g. 'Product Research Support' at Junior vs 'Product Research Management' at Middle, for the same category. Weight controls its influence on the category's weighted-average rollup."
       fields={[
         {
           key: "categoryId",
@@ -30,6 +30,7 @@ export default function CompetenciesAdminPage() {
           label: "Conditional question",
           type: "text",
         },
+        { key: "weight", label: "Weight", type: "number" },
         { key: "sortOrder", label: "Sort order", type: "number" },
       ]}
     />

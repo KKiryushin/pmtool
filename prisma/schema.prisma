@@ -158,6 +158,7 @@ model Competency {
   name                    String
   isConditional           Boolean @default(false)
   conditionalQuestionText String?
+  weight                  Float   @default(1.0)
   sortOrder               Int     @default(0)
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)

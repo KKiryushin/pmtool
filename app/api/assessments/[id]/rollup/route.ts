@@ -50,6 +50,7 @@ export async function GET(
       .filter((comp) => !(comp.isConditional && answerByCompetency.get(comp.id) === false))
       .map((comp) => ({
         id: comp.id,
+        weight: comp.weight,
         actions: comp.actions
           .filter((a) => scoreByAction.has(a.id))
           .map((a) => ({ score: scoreByAction.get(a.id)!, weight: a.weight })),

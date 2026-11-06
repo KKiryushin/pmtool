@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computeAssessmentRollup,
+  computeCategoryPercent,
   rollupCompetency,
   scoreToPercent,
 } from "../index";
@@ -113,7 +114,7 @@ describe("computeAssessmentRollup", () => {
           id: "cat1",
           name: "Category 1",
           targetPercent: 91,
-          competencies: [{ id: "comp1", actions: [{ score: 7, weight: 1 }] }],
+          competencies: [{ id: "comp1", weight: 1, actions: [{ score: 7, weight: 1 }] }],
         },
         {
           id: "cat2",
@@ -142,8 +143,8 @@ describe("computeAssessmentRollup", () => {
           name: "Category 1",
           targetPercent: 91,
           competencies: [
-            { id: "comp1", actions: [{ score: 10, weight: 1 }] }, // 100%
-            { id: "comp2", actions: [{ score: 0, weight: 1 }] }, // 0%
+            { id: "comp1", weight: 1, actions: [{ score: 10, weight: 1 }] }, // 100%
+            { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
           ],
         },
       ],
@@ -152,5 +153,48 @@ describe("computeAssessmentRollup", () => {
     );
 
     expect(result.categories[0].currentPercent).toBe(50);
+  });
+
+  it("weights competencies more heavily when their weight is higher", () => {
+    const result = computeAssessmentRollup(
+      [
+        {
+          id: "cat1",
+          name: "Category 1",
+          targetPercent: 91,
+          competencies: [
+            { id: "comp1", weight: 3, actions: [{ score: 10, weight: 1 }] }, // 100%
+            { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
+          ],
+        },
+      ],
+      "WEIGHTED_AVERAGE",
+      SCALE,
+    );
+
+    // (100*3 + 0*1) / 4 = 75
+    expect(result.categories[0].currentPercent).toBe(75);
+  });
+});
+
+describe("computeCategoryPercent", () => {
+  it("returns null for an empty category", () => {
+    expect(computeCategoryPercent([])).toBeNull();
+  });
+
+  it("weights each competency's percent by its own weight", () => {
+    const result = computeCategoryPercent([
+      { percent: 100, weight: 3 },
+      { percent: 0, weight: 1 },
+    ]);
+    expect(result).toBe(75);
+  });
+
+  it("falls back to a plain average when all weights are equal", () => {
+    const result = computeCategoryPercent([
+      { percent: 80, weight: 1 },
+      { percent: 40, weight: 1 },
+    ]);
+    expect(result).toBe(60);
   });
 });
