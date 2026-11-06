@@ -25,20 +25,41 @@ function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    setLoading(false);
+      if (result?.error) {
+        setError("Invalid email or password.");
+        setLoading(false);
+        return;
+      }
 
-    if (result?.error) {
-      setError("Invalid email or password.");
-      return;
+      // Double-check the session actually landed before navigating — on
+      // some networks (e.g. accessing by LAN IP) a cookie can silently
+      // fail to stick, and we'd rather show that than bounce back to a
+      // blank login page.
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json().catch(() => null);
+      if (!session?.user) {
+        setError(
+          "Signed in, but no session was created. If you're on your phone, check that Safari was allowed " +
+            "\"Local Network\" access for this site (iOS may prompt for this), then try again.",
+        );
+        setLoading(false);
+        return;
+      }
+
+      window.location.href = callbackUrl;
+    } catch (err) {
+      setLoading(false);
+      setError(
+        `Sign-in request failed: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
-
-    window.location.href = callbackUrl;
   }
 
   return (
