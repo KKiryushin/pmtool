@@ -95,21 +95,26 @@ export default function AssessmentWorkspacePage({
         View dashboard →
       </Link>
 
-      <ul className="divide-y divide-black/10 dark:divide-white/10">
-        {categories.map((c) => (
-          <li key={c.id} className="py-3">
-            <Link
-              href={`/assessments/${id}/categories/${c.id}`}
-              className="flex items-center justify-between"
-            >
-              <span>{c.name}</span>
-              <span className="text-sm text-black/50 dark:text-white/50">
-                {c.scoredActions} / {c.totalActions}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div>
+        <h2 className="mb-2 text-sm font-semibold">Competence categories</h2>
+        <ul className="divide-y divide-black/10 dark:divide-white/10">
+          {categories.map((c) => (
+            <li key={c.id} className="py-3">
+              <Link
+                href={`/assessments/${id}/categories/${c.id}`}
+                className="flex items-center justify-between"
+              >
+                <span>{c.name}</span>
+                <span className="text-sm text-black/50 dark:text-white/50">
+                  {c.totalActions > 0 && c.scoredActions === c.totalActions
+                    ? "Completed"
+                    : `${c.scoredActions}/${c.totalActions}`}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
