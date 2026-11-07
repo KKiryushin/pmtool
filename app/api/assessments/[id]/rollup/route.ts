@@ -18,6 +18,18 @@ export async function GET(
   );
   if (accessError) return accessError;
 
+  const allLevels = await prisma.level.findMany({
+    where: { frameworkId: assessment!.frameworkId },
+    orderBy: { sortOrder: "asc" },
+  });
+  const targetLevel = allLevels.find((l) => l.id === assessment!.levelId);
+  // Every level at or below the assessment's own level feeds the category
+  // score — levels above it never participate.
+  const eligibleLevels = targetLevel
+    ? allLevels.filter((l) => l.sortOrder <= targetLevel.sortOrder)
+    : [];
+  const eligibleLevelIds = eligibleLevels.map((l) => l.id);
+
   const [framework, categories, scores, answers, targets] = await Promise.all([
     prisma.framework.findUnique({
       where: { id: assessment!.frameworkId },
@@ -28,7 +40,7 @@ export async function GET(
       orderBy: { sortOrder: "asc" },
       include: {
         competencies: {
-          where: { levelId: assessment!.levelId },
+          where: { levelId: { in: eligibleLevelIds } },
           include: { actions: true },
         },
       },
@@ -42,20 +54,32 @@ export async function GET(
   const answerByCompetency = new Map(answers.map((a) => [a.competencyId, a.answer]));
   const targetByCategory = new Map(targets.map((t) => [t.categoryId, t.targetPercent]));
 
-  const categoryInputs: CategoryInput[] = categories.map((cat) => ({
-    id: cat.id,
-    name: cat.name,
-    targetPercent: targetByCategory.get(cat.id) ?? null,
-    competencies: cat.competencies
-      .filter((comp) => !(comp.isConditional && answerByCompetency.get(comp.id) === false))
-      .map((comp) => ({
-        id: comp.id,
-        weight: comp.weight,
-        actions: comp.actions
-          .filter((a) => scoreByAction.has(a.id))
-          .map((a) => ({ score: scoreByAction.get(a.id)!, weight: a.weight })),
+  const categoryInputs: CategoryInput[] = categories.map((cat) => {
+    const competenciesByLevel = new Map<string, typeof cat.competencies>();
+    for (const comp of cat.competencies) {
+      if (comp.isConditional && answerByCompetency.get(comp.id) === false) continue;
+      const list = competenciesByLevel.get(comp.levelId) ?? [];
+      list.push(comp);
+      competenciesByLevel.set(comp.levelId, list);
+    }
+
+    return {
+      id: cat.id,
+      name: cat.name,
+      targetPercent: targetByCategory.get(cat.id) ?? null,
+      levels: eligibleLevels.map((lvl) => ({
+        sortOrder: lvl.sortOrder,
+        isTarget: lvl.id === assessment!.levelId,
+        competencies: (competenciesByLevel.get(lvl.id) ?? []).map((comp) => ({
+          id: comp.id,
+          weight: comp.weight,
+          actions: comp.actions
+            .filter((a) => scoreByAction.has(a.id))
+            .map((a) => ({ score: scoreByAction.get(a.id)!, weight: a.weight })),
+        })),
       })),
-  }));
+    };
+  });
 
   const result = computeAssessmentRollup(
     categoryInputs,

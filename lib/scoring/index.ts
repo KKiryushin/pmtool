@@ -22,11 +22,23 @@ export interface CompetencyInput {
   actions: ActionScoreInput[];
 }
 
+/**
+ * One level's worth of competencies for a category. `isTarget` marks the
+ * level the assessment is actually being taken at — every other level in
+ * a category's `levels` array is a lower, "foundation" level that the
+ * target level's score is blended against.
+ */
+export interface CategoryLevelGroup {
+  sortOrder: number;
+  isTarget: boolean;
+  competencies: CompetencyInput[];
+}
+
 export interface CategoryInput {
   id: string;
   name: string;
   targetPercent: number | null;
-  competencies: CompetencyInput[];
+  levels: CategoryLevelGroup[];
 }
 
 export interface CategoryResult {
@@ -142,23 +154,67 @@ export function computeCategoryPercent(competencies: CompetencyPercentInput[]): 
   return competencies.reduce((sum, c) => sum + c.percent * c.weight, 0) / totalWeight;
 }
 
+/**
+ * Computes a single level's percent for a category.
+ *
+ * At the assessment's own (target) level, a competency with no scored
+ * actions is excluded from the average — unscored items aren't held
+ * against you at the level you're actually being assessed at.
+ *
+ * At a lower, foundation level, a competency with no scored actions
+ * contributes 0% instead of being excluded. Skipping a foundation level
+ * must count against you — otherwise cross-level scoring is gameable by
+ * simply never touching anything below your target level.
+ */
+function computeLevelPercent(
+  competencies: CompetencyInput[],
+  isTarget: boolean,
+  strategy: RollupStrategy,
+  scalePoints: ScalePointInput[],
+): number | null {
+  const scored = isTarget ? competencies.filter((c) => c.actions.length > 0) : competencies;
+
+  const percents = scored.map((c) => ({
+    percent: c.actions.length > 0 ? computeCompetencyPercent(c.actions, strategy, scalePoints) : 0,
+    weight: c.weight,
+  }));
+
+  return computeCategoryPercent(percents);
+}
+
+/**
+ * Combines a category's per-level percents into one cross-level score
+ * using a weighted geometric mean (equal weight per level here — all
+ * levels at or below the assessment's target level matter equally,
+ * since a lower level that's been strong for a while shouldn't count
+ * less just because it's not the current target).
+ *
+ * A geometric mean is deliberately harsher than a plain average on a
+ * weak or unscored lower level: one low level pulls the whole category
+ * down disproportionately (true "punishment" for skipping the
+ * foundation), while several solid levels land close to a plain
+ * average. It degrades smoothly rather than via a hard cutoff.
+ */
+function combineLevelPercents(percents: number[]): number | null {
+  if (percents.length === 0) return null;
+  const product = percents.reduce((acc, p) => acc * (p / 100), 1);
+  return 100 * Math.pow(product, 1 / percents.length);
+}
+
 export function computeAssessmentRollup(
   categories: CategoryInput[],
   strategy: RollupStrategy,
   scalePoints: ScalePointInput[],
 ): AssessmentRollupResult {
   const results: CategoryResult[] = categories.map((cat) => {
-    const competencyPercents = cat.competencies
-      .filter((c) => c.actions.length > 0)
-      .map((c) => ({
-        percent: computeCompetencyPercent(c.actions, strategy, scalePoints),
-        weight: c.weight,
-      }));
+    const levelPercents = cat.levels
+      .map((lvl) => computeLevelPercent(lvl.competencies, lvl.isTarget, strategy, scalePoints))
+      .filter((p): p is number => p !== null);
 
     return {
       id: cat.id,
       name: cat.name,
-      currentPercent: computeCategoryPercent(competencyPercents),
+      currentPercent: combineLevelPercents(levelPercents),
       targetPercent: cat.targetPercent,
     };
   });

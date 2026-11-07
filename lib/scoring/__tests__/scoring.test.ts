@@ -114,13 +114,19 @@ describe("computeAssessmentRollup", () => {
           id: "cat1",
           name: "Category 1",
           targetPercent: 91,
-          competencies: [{ id: "comp1", weight: 1, actions: [{ score: 7, weight: 1 }] }],
+          levels: [
+            {
+              sortOrder: 1,
+              isTarget: true,
+              competencies: [{ id: "comp1", weight: 1, actions: [{ score: 7, weight: 1 }] }],
+            },
+          ],
         },
         {
           id: "cat2",
           name: "Category 2 (nothing applicable)",
           targetPercent: null,
-          competencies: [],
+          levels: [{ sortOrder: 1, isTarget: true, competencies: [] }],
         },
       ],
       "WEIGHTED_AVERAGE",
@@ -142,9 +148,15 @@ describe("computeAssessmentRollup", () => {
           id: "cat1",
           name: "Category 1",
           targetPercent: 91,
-          competencies: [
-            { id: "comp1", weight: 1, actions: [{ score: 10, weight: 1 }] }, // 100%
-            { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
+          levels: [
+            {
+              sortOrder: 1,
+              isTarget: true,
+              competencies: [
+                { id: "comp1", weight: 1, actions: [{ score: 10, weight: 1 }] }, // 100%
+                { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
+              ],
+            },
           ],
         },
       ],
@@ -162,9 +174,15 @@ describe("computeAssessmentRollup", () => {
           id: "cat1",
           name: "Category 1",
           targetPercent: 91,
-          competencies: [
-            { id: "comp1", weight: 3, actions: [{ score: 10, weight: 1 }] }, // 100%
-            { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
+          levels: [
+            {
+              sortOrder: 1,
+              isTarget: true,
+              competencies: [
+                { id: "comp1", weight: 3, actions: [{ score: 10, weight: 1 }] }, // 100%
+                { id: "comp2", weight: 1, actions: [{ score: 0, weight: 1 }] }, // 0%
+              ],
+            },
           ],
         },
       ],
@@ -174,6 +192,94 @@ describe("computeAssessmentRollup", () => {
 
     // (100*3 + 0*1) / 4 = 75
     expect(result.categories[0].currentPercent).toBe(75);
+  });
+
+  it("blends a lower foundation level in via a geometric mean, not a plain average", () => {
+    const result = computeAssessmentRollup(
+      [
+        {
+          id: "cat1",
+          name: "Category 1",
+          targetPercent: 91,
+          levels: [
+            {
+              // Junior: 100%
+              sortOrder: 0,
+              isTarget: false,
+              competencies: [{ id: "jr", weight: 1, actions: [{ score: 10, weight: 1 }] }],
+            },
+            {
+              // Senior (target): 79%
+              sortOrder: 2,
+              isTarget: true,
+              competencies: [{ id: "sr", weight: 1, actions: [{ score: 4, weight: 1 }] }],
+            },
+          ],
+        },
+      ],
+      "WEIGHTED_AVERAGE",
+      SCALE,
+    );
+
+    // geometric mean of 100 and 79 -> sqrt(100*79) ≈ 88.88, not the plain average (89.5)
+    expect(result.categories[0].currentPercent).toBeCloseTo(88.88, 1);
+  });
+
+  it("punishes an unscored foundation level instead of excluding it", () => {
+    const result = computeAssessmentRollup(
+      [
+        {
+          id: "cat1",
+          name: "Category 1",
+          targetPercent: 91,
+          levels: [
+            {
+              // Junior competency exists but was never scored -> 0%, included
+              sortOrder: 0,
+              isTarget: false,
+              competencies: [{ id: "jr", weight: 1, actions: [] }],
+            },
+            {
+              // Senior (target): perfect score
+              sortOrder: 2,
+              isTarget: true,
+              competencies: [{ id: "sr", weight: 1, actions: [{ score: 10, weight: 1 }] }],
+            },
+          ],
+        },
+      ],
+      "WEIGHTED_AVERAGE",
+      SCALE,
+    );
+
+    // geometric mean of 0 and 100 -> 0, a perfect target score can't paper over a
+    // completely unscored foundation
+    expect(result.categories[0].currentPercent).toBe(0);
+  });
+
+  it("excludes a lower level entirely when the category has no competency defined there", () => {
+    const result = computeAssessmentRollup(
+      [
+        {
+          id: "cat1",
+          name: "Category 1",
+          targetPercent: 91,
+          levels: [
+            { sortOrder: 0, isTarget: false, competencies: [] }, // nothing defined at Junior
+            {
+              sortOrder: 2,
+              isTarget: true,
+              competencies: [{ id: "sr", weight: 1, actions: [{ score: 7, weight: 1 }] }],
+            },
+          ],
+        },
+      ],
+      "WEIGHTED_AVERAGE",
+      SCALE,
+    );
+
+    // only the Senior level counts, same as if it were the only level at all
+    expect(result.categories[0].currentPercent).toBe(91);
   });
 });
 
