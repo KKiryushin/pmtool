@@ -87,5 +87,13 @@ export async function GET(
     framework!.scale.points.map((p) => ({ score: p.score, percent: p.percent })),
   );
 
-  return NextResponse.json(result);
+  return NextResponse.json({
+    ...result,
+    levels: eligibleLevels.map((l) => ({
+      sortOrder: l.sortOrder,
+      name: l.name,
+      shortName: l.shortName,
+      isTarget: l.id === assessment!.levelId,
+    })),
+  });
 }

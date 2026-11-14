@@ -13,16 +13,31 @@ import {
   Tooltip,
 } from "recharts";
 
+interface LevelPercentResult {
+  sortOrder: number;
+  isTarget: boolean;
+  percent: number | null;
+}
+
 interface CategoryResult {
   id: string;
   name: string;
   currentPercent: number | null;
   targetPercent: number | null;
+  levelPercents: LevelPercentResult[];
+}
+
+interface LevelInfo {
+  sortOrder: number;
+  name: string;
+  shortName: string;
+  isTarget: boolean;
 }
 
 interface RollupResult {
   categories: CategoryResult[];
   overallPercent: number | null;
+  levels: LevelInfo[];
 }
 
 export default function DashboardPage({
@@ -102,22 +117,47 @@ export default function DashboardPage({
         <thead>
           <tr className="border-b border-black/10 dark:border-white/10">
             <th className="py-1.5 pr-3 font-medium">Category</th>
+            {rollup.levels.map((lvl) => (
+              <th
+                key={lvl.sortOrder}
+                className={`py-1.5 pr-3 font-medium ${lvl.isTarget ? "" : "text-black/50 dark:text-white/50"}`}
+                title={lvl.name}
+              >
+                {lvl.shortName}
+              </th>
+            ))}
             <th className="py-1.5 pr-3 font-medium">Current</th>
             <th className="py-1.5 pr-3 font-medium">Target</th>
           </tr>
         </thead>
         <tbody>
-          {rollup.categories.map((c) => (
-            <tr key={c.id} className="border-b border-black/5 dark:border-white/5">
-              <td className="py-1.5 pr-3">{c.name}</td>
-              <td className="py-1.5 pr-3">
-                {c.currentPercent != null ? `${Math.round(c.currentPercent)}%` : "—"}
-              </td>
-              <td className="py-1.5 pr-3">
-                {c.targetPercent != null ? `${Math.round(c.targetPercent)}%` : "—"}
-              </td>
-            </tr>
-          ))}
+          {rollup.categories.map((c) => {
+            const percentByLevel = new Map(
+              c.levelPercents.map((lp) => [lp.sortOrder, lp.percent]),
+            );
+            return (
+              <tr key={c.id} className="border-b border-black/5 dark:border-white/5">
+                <td className="py-1.5 pr-3">{c.name}</td>
+                {rollup.levels.map((lvl) => {
+                  const percent = percentByLevel.get(lvl.sortOrder);
+                  return (
+                    <td
+                      key={lvl.sortOrder}
+                      className={`py-1.5 pr-3 ${lvl.isTarget ? "" : "text-black/50 dark:text-white/50"}`}
+                    >
+                      {percent != null ? `${Math.round(percent)}%` : "—"}
+                    </td>
+                  );
+                })}
+                <td className="py-1.5 pr-3 font-medium">
+                  {c.currentPercent != null ? `${Math.round(c.currentPercent)}%` : "—"}
+                </td>
+                <td className="py-1.5 pr-3">
+                  {c.targetPercent != null ? `${Math.round(c.targetPercent)}%` : "—"}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

@@ -41,11 +41,20 @@ export interface CategoryInput {
   levels: CategoryLevelGroup[];
 }
 
+export interface LevelPercentResult {
+  sortOrder: number;
+  isTarget: boolean;
+  /** null when this category has no competency defined at this level at all. */
+  percent: number | null;
+}
+
 export interface CategoryResult {
   id: string;
   name: string;
   currentPercent: number | null;
   targetPercent: number | null;
+  /** One entry per level passed in, in the same order, for a per-level breakdown. */
+  levelPercents: LevelPercentResult[];
 }
 
 export interface AssessmentRollupResult {
@@ -207,15 +216,21 @@ export function computeAssessmentRollup(
   scalePoints: ScalePointInput[],
 ): AssessmentRollupResult {
   const results: CategoryResult[] = categories.map((cat) => {
-    const levelPercents = cat.levels
-      .map((lvl) => computeLevelPercent(lvl.competencies, lvl.isTarget, strategy, scalePoints))
+    const levelPercents: LevelPercentResult[] = cat.levels.map((lvl) => ({
+      sortOrder: lvl.sortOrder,
+      isTarget: lvl.isTarget,
+      percent: computeLevelPercent(lvl.competencies, lvl.isTarget, strategy, scalePoints),
+    }));
+    const defined = levelPercents
+      .map((lp) => lp.percent)
       .filter((p): p is number => p !== null);
 
     return {
       id: cat.id,
       name: cat.name,
-      currentPercent: combineLevelPercents(levelPercents),
+      currentPercent: combineLevelPercents(defined),
       targetPercent: cat.targetPercent,
+      levelPercents,
     };
   });
 
